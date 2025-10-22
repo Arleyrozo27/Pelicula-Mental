@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Película Mental - Crea tu Video</title>
+    <meta name="description" content="Crea un video personalizado de visualización de tus sueños y metas con imágenes inspiradoras, música motivacional y frases poderosas.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/public/favicon.svg">
+    <link rel="alternate icon" href="/public/favicon.svg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <link rel="stylesheet" href="/public/styles.css">
+</head>
+<body class="dark">
+    <!-- App Background Layers -->
+    <div class="app-background" id="app-bg-1"></div>
+    <div class="app-background" id="app-bg-2" style="opacity: 0;"></div>
+    
+    <!-- Global Emoji Rain Container -->
+    <div class="emoji-rain-container" id="emoji-rain-global"></div>
+    <!-- Dream Selection Section -->
+    <section id="dream-selection" class="section active">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Elige Tu Sueño</h2>
+                <p class="section-subtitle">Selecciona la categoría que mejor represente tu meta o aspiración</p>
+            </div>
+
+            <div class="dream-grid">
+                <!-- Career -->
+                <div class="dream-card" data-category="career" data-testid="card-dream-career" onclick="app.selectDream('career')">
+                    <div class="dream-card-image">
+                        <img src="/attached_assets/generated_images/Career_start_office_lobby_fd70d175.png" alt="Carrera Profesional">
+                        <div class="dream-card-overlay"></div>
+                    </div>
+                    <div class="dream-card-content">
+                        <i data-lucide="briefcase" class="dream-icon"></i>
+                        <h3 class="dream-title">Carrera Profesional</h3>
+                        <p class="dream-description">Alcanza el éxito en tu trayectoria profesional</p>
+                    </div>
+                </div>
+
+                <!-- Travel -->
+                <div class="dream-card" data-category="travel" data-testid="card-dream-travel" onclick="app.selectDream('travel')">
+                    <div class="dream-card-image">
+                        <img src="/attached_assets/generated_images/Travel_airport_departure_beginning_382c455b.png" alt="Viajes">
+                        <div class="dream-card-overlay"></div>
+                    </div>
+                    <div class="dream-card-content">
+                        <i data-lucide="plane" class="dream-icon"></i>
+                        <h3 class="dream-title">Viajes</h3>
+                        <p class="dream-description">Explora el mundo y vive nuevas aventuras</p>
+                    </div>
+                </div>
+
+                <!-- Health -->
+                <div class="dream-card" data-category="health" data-testid="card-dream-health" onclick="app.selectDream('health')">
+                    <div class="dream-card-image">
+                        <img src="/attached_assets/generated_images/Health_fitness_journey_beginning_c50f00af.png" alt="Salud y Bienestar">
+                        <div class="dream-card-overlay"></div>
+                    </div>
+                    <div class="dream-card-content">
+                        <i data-lucide="heart-pulse" class="dream-icon"></i>
+                        <h3 class="dream-title">Salud y Bienestar</h3>
+                        <p class="dream-description">Transforma tu salud física y mental</p>
+                    </div>
+                </div>
+
+                <!-- Family -->
+                <div class="dream-card" data-category="family" data-testid="card-dream-family" onclick="app.selectDream('family')">
+                    <div class="dream-card-image">
+                        <img src="/attached_assets/generated_images/Family_picnic_preparation_together_754922fa.png" alt="Familia">
+                        <div class="dream-card-overlay"></div>
+                    </div>
+                    <div class="dream-card-content">
+                        <i data-lucide="users" class="dream-icon"></i>
+                        <h3 class="dream-title">Familia</h3>
+                        <p class="dream-description">Fortalece los lazos con quienes más amas</p>
+                    </div>
+                </div>
+
+                <!-- Education -->
+                <div class="dream-card" data-category="education" data-testid="card-dream-education" onclick="app.selectDream('education')">
+                    <div class="dream-card-image">
+                        <img src="/attached_assets/generated_images/Education_library_student_beginning_04718a82.png" alt="Educación">
+                        <div class="dream-card-overlay"></div>
+                    </div>
+                    <div class="dream-card-content">
+                        <i data-lucide="graduation-cap" class="dream-icon"></i>
+                        <h3 class="dream-title">Educación</h3>
+                        <p class="dream-description">Alcanza tus metas académicas y de aprendizaje</p>
+                    </div>
+                </div>
+
+                <!-- Entrepreneurship -->
+                <div class="dream-card" data-category="entrepreneurship" data-testid="card-dream-entrepreneurship" onclick="app.selectDream('entrepreneurship')">
+                    <div class="dream-card-image">
+                        <img src="/attached_assets/generated_images/Entrepreneurship_home_office_startup_30aca9a0.png" alt="Emprendimiento">
+                        <div class="dream-card-overlay"></div>
+                    </div>
+                    <div class="dream-card-content">
+                        <i data-lucide="rocket" class="dream-icon"></i>
+                        <h3 class="dream-title">Emprendimiento</h3>
+                        <p class="dream-description">Construye el negocio de tus sueños</p>
+                    </div>
+                </div>
+
+                <!-- Love/Relationships -->
+                <div class="dream-card" data-category="love" data-testid="card-dream-love" onclick="app.selectDream('love')">
+                    <div class="dream-card-image">
+                        <img src="/attached_assets/generated_images/First_coffee_date_romantic_5b88115d.png" alt="Amor y Relaciones">
+                        <div class="dream-card-overlay"></div>
+                    </div>
+                    <div class="dream-card-content">
+                        <i data-lucide="heart" class="dream-icon"></i>
+                        <h3 class="dream-title">Amor y Relaciones</h3>
+                        <p class="dream-description">Encuentra y fortalece el amor verdadero</p>
+                    </div>
+                </div>
+
+                <!-- Finance/Wealth -->
+                <div class="dream-card" data-category="finance" data-testid="card-dream-finance" onclick="app.selectDream('finance')">
+                    <div class="dream-card-image">
+                        <img src="/attached_assets/generated_images/First_job_professional_desk_b829e699.png" alt="Finanzas y Riqueza">
+                        <div class="dream-card-overlay"></div>
+                    </div>
+                    <div class="dream-card-content">
+                        <i data-lucide="dollar-sign" class="dream-icon"></i>
+                        <h3 class="dream-title">Finanzas y Riqueza</h3>
+                        <p class="dream-description">Alcanza la libertad financiera</p>
+                    </div>
+                </div>
+
+                <!-- Creativity/Art -->
+                <div class="dream-card" data-category="creativity" data-testid="card-dream-creativity" onclick="app.selectDream('creativity')">
+                    <div class="dream-card-image">
+                        <img src="/attached_assets/generated_images/Artist_sketching_creative_beginning_ff3fec42.png" alt="Creatividad y Arte">
+                        <div class="dream-card-overlay"></div>
+                    </div>
+                    <div class="dream-card-content">
+                        <i data-lucide="palette" class="dream-icon"></i>
+                        <h3 class="dream-title">Creatividad y Arte</h3>
+                        <p class="dream-description">Expresa tu creatividad y talento artístico</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="custom-dream-input">
+                <label for="custom-dream-text" class="input-label">
+                    <i data-lucide="edit-3"></i>
+                    O describe tu sueño personalizado
+                </label>
+                <textarea 
+                    id="custom-dream-text" 
+                    data-testid="input-custom-dream"
+                    placeholder="Escribe aquí tu sueño o meta específica..."
+                    maxlength="500"
+                    rows="4"
+                ></textarea>
+                <div class="char-counter">
+                    <span id="char-count">0</span>/500
+                </div>
+            </div>
+
+            <div class="section-actions">
+                <button class="btn btn-secondary" data-testid="button-back-hero" onclick="window.location.href='index.html'">
+                    <i data-lucide="arrow-left"></i>
+                    Volver al Inicio
+                </button>
+                <button class="btn btn-primary" data-testid="button-next-animation" onclick="app.navigateToSection('dream-animation')" disabled id="next-to-animation">
+                    Continuar
+                    <i data-lucide="arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dream Animation Section (Emoji Rain) -->
+    <section id="dream-animation" class="section">
+        <div class="emoji-rain-container" id="emoji-rain"></div>
+        <div class="container animation-content">
+            <div class="animation-message">
+                <h2 class="animation-title" id="animation-title">✨ Visualiza tu sueño ✨</h2>
+                <p class="animation-subtitle" id="animation-subtitle">Siente la energía de tu meta</p>
+                <button class="btn btn-primary btn-continue-animation" data-testid="button-continue-config" onclick="app.navigateToSection('configuration')">
+                    <span>Continuar a Personalización</span>
+                    <i data-lucide="arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Configuration Section -->
+    <section id="configuration" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Personaliza Tu Video</h2>
+                <p class="section-subtitle">Configura la duración y elige la música perfecta</p>
+            </div>
+
+            <div class="config-grid">
+                <!-- Duration Selection -->
+                <div class="config-card">
+                    <h3 class="config-card-title">
+                        <i data-lucide="clock"></i>
+                        Duración del Video
+                    </h3>
+                    <div class="duration-options">
+                        <button class="duration-btn" data-duration="15" data-testid="button-duration-15" onclick="app.selectDuration(15)">
+                            15s
+                        </button>
+                        <button class="duration-btn active" data-duration="30" data-testid="button-duration-30" onclick="app.selectDuration(30)">
+                            30s
+                        </button>
+                        <button class="duration-btn" data-duration="45" data-testid="button-duration-45" onclick="app.selectDuration(45)">
+                            45s
+                        </button>
+                        <button class="duration-btn" data-duration="60" data-testid="button-duration-60" onclick="app.selectDuration(60)">
+                            60s
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Music Selection -->
+                <div class="config-card full-width">
+                    <h3 class="config-card-title">
+                        <i data-lucide="music"></i>
+                        Música de Fondo
+                    </h3>
+                    <div class="music-grid">
+                        <div class="music-option" data-music="motivational" data-testid="option-music-motivational" onclick="app.selectMusic('motivational')">
+                            <div class="music-option-icon">
+                                <i data-lucide="zap"></i>
+                            </div>
+                            <h4>Motivacional</h4>
+                            <p>Energía y determinación</p>
+                            <button class="music-preview-btn" data-testid="button-preview-motivational" onclick="event.stopPropagation(); app.previewMusic('motivational')">
+                                <i data-lucide="play"></i>
+                            </button>
+                        </div>
+
+                        <div class="music-option" data-music="epic" data-testid="option-music-epic" onclick="app.selectMusic('epic')">
+                            <div class="music-option-icon">
+                                <i data-lucide="flame"></i>
+                            </div>
+                            <h4>Épica</h4>
+                            <p>Grandiosa y poderosa</p>
+                            <button class="music-preview-btn" data-testid="button-preview-epic" onclick="event.stopPropagation(); app.previewMusic('epic')">
+                                <i data-lucide="play"></i>
+                            </button>
+                        </div>
+
+                        <div class="music-option" data-music="relaxing" data-testid="option-music-relaxing" onclick="app.selectMusic('relaxing')">
+                            <div class="music-option-icon">
+                                <i data-lucide="cloud"></i>
+                            </div>
+                            <h4>Relajante</h4>
+                            <p>Calma y paz interior</p>
+                            <button class="music-preview-btn" data-testid="button-preview-relaxing" onclick="event.stopPropagation(); app.previewMusic('relaxing')">
+                                <i data-lucide="play"></i>
+                            </button>
+                        </div>
+
+                        <div class="music-option" data-music="inspiring" data-testid="option-music-inspiring" onclick="app.selectMusic('inspiring')">
+                            <div class="music-option-icon">
+                                <i data-lucide="sun"></i>
+                            </div>
+                            <h4>Inspiradora</h4>
+                            <p>Esperanza y optimismo</p>
+                            <button class="music-preview-btn" data-testid="button-preview-inspiring" onclick="event.stopPropagation(); app.previewMusic('inspiring')">
+                                <i data-lucide="play"></i>
+                            </button>
+                        </div>
+
+                        <div class="music-option" data-music="energetic" data-testid="option-music-energetic" onclick="app.selectMusic('energetic')">
+                            <div class="music-option-icon">
+                                <i data-lucide="activity"></i>
+                            </div>
+                            <h4>Energética</h4>
+                            <p>Vibrante y dinámica</p>
+                            <button class="music-preview-btn" data-testid="button-preview-energetic" onclick="event.stopPropagation(); app.previewMusic('energetic')">
+                                <i data-lucide="play"></i>
+                            </button>
+                        </div>
+
+                        <div class="music-option" data-music="peaceful" data-testid="option-music-peaceful" onclick="app.selectMusic('peaceful')">
+                            <div class="music-option-icon">
+                                <i data-lucide="heart"></i>
+                            </div>
+                            <h4>Tranquila</h4>
+                            <p>Serena y armoniosa</p>
+                            <button class="music-preview-btn" data-testid="button-preview-peaceful" onclick="event.stopPropagation(); app.previewMusic('peaceful')">
+                                <i data-lucide="play"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <!-- Phrase Editor -->
+                <div class="config-card full-width">
+                    <h3 class="config-card-title">
+                        <i data-lucide="edit-3"></i>
+                        Frases Motivacionales
+                    </h3>
+                    <p class="config-description">Personaliza las frases que aparecerán en tu video</p>
+                    <button class="btn btn-outline" data-testid="button-open-phrase-editor" onclick="app.openPhraseEditor()">
+                        <i data-lucide="pencil"></i>
+                        Editar Frases
+                    </button>
+                </div>
+            </div>
+
+            <div class="section-actions">
+                <button class="btn btn-secondary" data-testid="button-back-dream" onclick="app.navigateToSection('dream-selection')">
+                    <i data-lucide="arrow-left"></i>
+                    Atrás
+                </button>
+                <button class="btn btn-primary btn-generate" data-testid="button-generate-video" onclick="app.generateVideo()" id="generate-video-btn">
+                    <i data-lucide="film"></i>
+                    Generar Mi Película Mental
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Generation Section -->
+    <section id="video-generation" class="section">
+        <div class="container">
+            <div class="video-generation-content">
+                <div class="generation-status" id="generation-status">
+                    <!-- Circular Progress Indicator -->
+                    <div class="circular-progress">
+                        <svg class="progress-ring" width="200" height="200">
+                            <circle class="progress-ring-circle-bg" 
+                                stroke="var(--border-color)" 
+                                stroke-width="8" 
+                                fill="transparent" 
+                                r="90" 
+                                cx="100" 
+                                cy="100"/>
+                            <circle class="progress-ring-circle" 
+                                stroke="url(#gradient)" 
+                                stroke-width="8" 
+                                fill="transparent" 
+                                r="90" 
+                                cx="100" 
+                                cy="100"
+                                id="progress-circle"/>
+                            <defs>
+                                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:var(--primary);stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:var(--secondary);stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <div class="progress-content">
+                            <div class="progress-percentage" id="progress-percentage">0%</div>
+                            <div class="progress-icon">
+                                <i data-lucide="sparkles"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="generation-title">Creando tu Película Mental...</h3>
+                    <p class="generation-message" id="generation-message">Preparando imágenes y música</p>
+                    
+                    <!-- Motivational Phrases -->
+                    <div class="motivational-phrase" id="motivational-phrase">
+                        <i data-lucide="quote"></i>
+                        <span id="phrase-text">Tu futuro se está creando ahora mismo...</span>
+                    </div>
+                </div>
+
+                <div class="video-player-container" id="video-player-container" style="display: none;">
+                    <canvas id="video-canvas" style="display: none;"></canvas>
+                    <video id="generated-video" data-testid="video-player" controls></video>
+
+                    <div class="video-actions">
+                        <button class="btn btn-primary" data-testid="button-download" onclick="app.downloadVideo()">
+                            <i data-lucide="download"></i>
+                            Descargar Video
+                        </button>
+                        <button class="btn btn-primary" data-testid="button-save-gallery" onclick="app.saveToGallery()" id="save-gallery-btn">
+                            <i data-lucide="bookmark-plus"></i>
+                            Guardar en Galería
+                        </button>
+                        <button class="btn btn-secondary" data-testid="button-share" onclick="app.shareVideo()">
+                            <i data-lucide="share-2"></i>
+                            Compartir
+                        </button>
+                        <button class="btn btn-secondary" data-testid="button-view-gallery" onclick="app.navigateToSection('gallery')">
+                            <i data-lucide="folder-open"></i>
+                            Ver Galería
+                        </button>
+                        <button class="btn btn-secondary" data-testid="button-create-new" onclick="app.navigateToSection('dream-selection')">
+                            <i data-lucide="plus-circle"></i>
+                            Crear Nuevo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Mi Galería de Videos</h2>
+                <p class="section-subtitle">Tus videos guardados localmente en este dispositivo</p>
+            </div>
+
+            <div class="gallery-header">
+                <div class="gallery-stats">
+                    <span id="gallery-count">0 videos guardados</span>
+                </div>
+                <div class="gallery-actions">
+                    <button class="btn btn-secondary" data-testid="button-clear-gallery" onclick="app.clearGallery()" id="clear-gallery-btn" style="display: none;">
+                        <i data-lucide="trash-2"></i>
+                        Borrar Todo
+                    </button>
+                </div>
+            </div>
+
+            <div id="gallery-grid" class="gallery-grid">
+                <!-- Videos will be dynamically loaded here -->
+            </div>
+
+            <div id="gallery-empty" class="gallery-empty" style="display: none;">
+                <i data-lucide="folder-open" class="empty-icon"></i>
+                <h3>No hay videos guardados</h3>
+                <p>Cuando generes un video, podrás guardarlo aquí para verlo después</p>
+                <button class="btn btn-primary" data-testid="button-create-from-gallery" onclick="app.navigateToSection('dream-selection')">
+                    <i data-lucide="plus-circle"></i>
+                    Crear Mi Primer Video
+                </button>
+            </div>
+
+            <div class="section-actions">
+                <button class="btn btn-secondary" data-testid="button-back-from-gallery" onclick="window.location.href='index.html'">
+                    <i data-lucide="arrow-left"></i>
+                    Volver al Inicio
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Share Modal -->
+    <div id="share-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Compartir tu Película Mental</h3>
+                <button class="modal-close" data-testid="button-close-modal" onclick="app.closeShareModal()">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Comparte tu video de visualización en tus redes favoritas:</p>
+                <div class="share-options">
+                    <button class="share-btn" data-testid="button-share-whatsapp" onclick="app.shareToWhatsApp()">
+                        <i data-lucide="message-circle"></i>
+                        WhatsApp
+                    </button>
+                    <button class="share-btn" data-testid="button-share-facebook" onclick="app.shareToFacebook()">
+                        <i data-lucide="facebook"></i>
+                        Facebook
+                    </button>
+                    <button class="share-btn" data-testid="button-share-twitter" onclick="app.shareToTwitter()">
+                        <i data-lucide="twitter"></i>
+                        Twitter
+                    </button>
+                    <button class="share-btn" data-testid="button-copy-link" onclick="app.copyVideoLink()">
+                        <i data-lucide="link"></i>
+                        Copiar Enlace
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Phrase Editor Modal -->
+    <div id="phrase-editor-modal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3>Editar Frases Motivacionales</h3>
+                <button class="modal-close" data-testid="button-close-phrase-editor" onclick="app.closePhraseEditor()">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-description">Personaliza las 5 frases que aparecerán en tu video. Deja en blanco para usar frases predeterminadas.</p>
+                
+                <div class="phrase-inputs">
+                    <div class="phrase-input-group">
+                        <label for="phrase-1">
+                            <i data-lucide="message-square"></i>
+                            Frase 1
+                        </label>
+                        <input 
+                            type="text" 
+                            id="phrase-1" 
+                            data-testid="input-phrase-1"
+                            placeholder="Tu sueño está más cerca de lo que piensas"
+                            maxlength="100"
+                        >
+                        <span class="char-counter" id="phrase-1-count">0/100</span>
+                    </div>
+                    
+                    <div class="phrase-input-group">
+                        <label for="phrase-2">
+                            <i data-lucide="message-square"></i>
+                            Frase 2
+                        </label>
+                        <input 
+                            type="text" 
+                            id="phrase-2" 
+                            data-testid="input-phrase-2"
+                            placeholder="Visualiza, cree, y alcanza"
+                            maxlength="100"
+                        >
+                        <span class="char-counter" id="phrase-2-count">0/100</span>
+                    </div>
+                    
+                    <div class="phrase-input-group">
+                        <label for="phrase-3">
+                            <i data-lucide="message-square"></i>
+                            Frase 3
+                        </label>
+                        <input 
+                            type="text" 
+                            id="phrase-3" 
+                            data-testid="input-phrase-3"
+                            placeholder="Cada paso te acerca a tu meta"
+                            maxlength="100"
+                        >
+                        <span class="char-counter" id="phrase-3-count">0/100</span>
+                    </div>
+                    
+                    <div class="phrase-input-group">
+                        <label for="phrase-4">
+                            <i data-lucide="message-square"></i>
+                            Frase 4
+                        </label>
+                        <input 
+                            type="text" 
+                            id="phrase-4" 
+                            data-testid="input-phrase-4"
+                            placeholder="Tu potencial es infinito"
+                            maxlength="100"
+                        >
+                        <span class="char-counter" id="phrase-4-count">0/100</span>
+                    </div>
+                    
+                    <div class="phrase-input-group">
+                        <label for="phrase-5">
+                            <i data-lucide="message-square"></i>
+                            Frase 5
+                        </label>
+                        <input 
+                            type="text" 
+                            id="phrase-5" 
+                            data-testid="input-phrase-5"
+                            placeholder="Haz que suceda"
+                            maxlength="100"
+                        >
+                        <span class="char-counter" id="phrase-5-count">0/100</span>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" data-testid="button-reset-phrases" onclick="app.resetPhrases()">
+                        <i data-lucide="rotate-ccw"></i>
+                        Restaurar Predeterminadas
+                    </button>
+                    <button class="btn btn-primary" data-testid="button-save-phrases" onclick="app.savePhrases()">
+                        <i data-lucide="check"></i>
+                        Guardar Frases
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Volume Control -->
+    <div class="volume-control" id="volume-control">
+        <button class="volume-btn" id="volume-btn" data-testid="button-volume-toggle" title="Controlar volumen">
+            <i data-lucide="volume-2" id="volume-icon"></i>
+        </button>
+        <div class="volume-slider-container" id="volume-slider-container">
+            <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="30" step="1">
+        </div>
+    </div>
+
+    <script src="/public/notifications.js"></script>
+    <script src="/public/video-storage.js"></script>
+    <script src="/public/audio-generator.js"></script>
+    <script src="/public/video-generator.js"></script>
+    <script src="/public/background-music.js"></script>
+    <script src="/public/main.js"></script>
+    <script>
+        // App Background Auto-Rotation
+        const appBackgrounds = [
+            '/attached_assets/generated_images/Dark_neural_network_connections_4cd53eec.png',
+            '/attached_assets/generated_images/Dark_gradient_minimal_waves_70049b76.png',
+            '/attached_assets/generated_images/Dark_space_minimal_starfield_e6c215d7.png',
+            '/attached_assets/generated_images/Dark_geometric_sacred_patterns_81cbc5e3.png',
+            '/attached_assets/generated_images/Dark_underwater_bioluminescence_8c956b91.png',
+            '/attached_assets/generated_images/Dark_minimal_aurora_abstract_3a336bae.png'
+        ];
+        
+        let currentAppBgIndex = Math.floor(Math.random() * appBackgrounds.length);
+        const appBg1 = document.getElementById('app-bg-1');
+        const appBg2 = document.getElementById('app-bg-2');
+        let isFirstAppLayerActive = true;
+        
+        // Preload all app background images
+        const appImageCache = {};
+        appBackgrounds.forEach((url, index) => {
+            const img = new Image();
+            img.onload = () => {
+                appImageCache[index] = true;
+                console.log(`App background ${index + 1}/${appBackgrounds.length} loaded`);
+            };
+            img.src = url;
+        });
+        
+        function setAppBackgroundImage(element, index) {
+            if (!element) return;
+            const bgUrl = appBackgrounds[index];
+            element.style.backgroundImage = `
+                linear-gradient(135deg, rgba(147, 51, 234, 0.2) 0%, rgba(6, 182, 212, 0.2) 100%),
+                url('${bgUrl}')
+            `;
+        }
+        
+        function rotateAppBackground() {
+            const nextBgIndex = (currentAppBgIndex + 1) % appBackgrounds.length;
+            
+            // Only transition if next image is loaded
+            if (!appImageCache[nextBgIndex]) {
+                console.log(`Waiting for app image ${nextBgIndex} to load...`);
+                return;
+            }
+            
+            const activeLayer = isFirstAppLayerActive ? appBg1 : appBg2;
+            const nextLayer = isFirstAppLayerActive ? appBg2 : appBg1;
+            
+            setAppBackgroundImage(nextLayer, nextBgIndex);
+            
+            setTimeout(() => {
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        activeLayer.style.opacity = '0';
+                        nextLayer.style.opacity = '1';
+                    });
+                });
+            }, 100);
+            
+            currentAppBgIndex = nextBgIndex;
+            isFirstAppLayerActive = !isFirstAppLayerActive;
+        }
+        
+        // Set initial app background
+        setAppBackgroundImage(appBg1, currentAppBgIndex);
+        
+        // Rotate app background every 15 seconds
+        setInterval(rotateAppBackground, 15000);
+        
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', () => {
+            app.init();
+            
+            // Initialize background music
+            if (window.backgroundMusic) {
+                window.backgroundMusic.init();
+            }
+        });
+    </script>
+</body>
+</html>

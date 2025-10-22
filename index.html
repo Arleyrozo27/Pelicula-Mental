@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Película Mental - Visualiza tus Sueños</title>
+    <meta name="description" content="Crea un video personalizado de visualización de tus sueños y metas con imágenes inspiradoras, música motivacional y frases poderosas.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/public/favicon.svg">
+    <link rel="alternate icon" href="/public/favicon.svg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <link rel="stylesheet" href="/public/styles.css">
+</head>
+<body class="dark">
+    <!-- Hero Section / Welcome Screen -->
+    <section id="hero-section" class="section active">
+        <div class="hero-background" id="hero-bg-1"></div>
+        <div class="hero-background" id="hero-bg-2" style="opacity: 0;"></div>
+        <div class="hero-content">
+            <div class="hero-particles"></div>
+            <h1 class="hero-title">
+                <span class="gradient-text">Película Mental</span>
+            </h1>
+            <p class="hero-subtitle">
+                Visualiza tus sueños. Manifiesta tu realidad.
+            </p>
+            <p class="hero-description">
+                Crea un video personalizado que transformará tus metas en una experiencia visual poderosa
+            </p>
+            <button class="btn btn-primary btn-hero" data-testid="button-start-journey" onclick="window.location.href='/public/app.html'">
+                <i data-lucide="sparkles"></i>
+                <span>Comenzar Mi Viaje</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Volume Control -->
+    <div class="volume-control" id="volume-control">
+        <button class="volume-btn" id="volume-btn" data-testid="button-volume-toggle" title="Controlar volumen">
+            <i data-lucide="volume-2" id="volume-icon"></i>
+        </button>
+        <div class="volume-slider-container" id="volume-slider-container">
+            <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="30" step="1">
+        </div>
+    </div>
+
+    <script src="/public/notifications.js"></script>
+    <script src="/public/audio-generator.js"></script>
+    <script src="/public/background-music.js"></script>
+    <script>
+        // Hero Background Auto-Rotation
+        const heroBackgrounds = [
+            '/attached_assets/generated_images/Hero_dreamy_cosmic_gradient_e6309033.png',
+            '/attached_assets/generated_images/Cosmic_purple_cyan_nebula_2593b90b.png',
+            '/attached_assets/generated_images/Aurora_purple_turquoise_waves_326ea518.png',
+            '/attached_assets/generated_images/Galaxy_portal_energy_vortex_832455db.png',
+            '/attached_assets/generated_images/Twilight_purple_cyan_clouds_dbe72a4a.png',
+            '/attached_assets/generated_images/Mountains_under_aurora_sky_de5bfa67.png',
+            '/attached_assets/generated_images/Dark_cosmic_void_stars_329e38a1.png',
+            '/attached_assets/generated_images/Midnight_mountain_silhouette_dreams_6a4e7b94.png',
+            '/attached_assets/generated_images/Dark_meditation_energy_waves_bcee9ad1.png',
+            '/attached_assets/generated_images/Dark_ocean_bioluminescent_glow_11e4055b.png'
+        ];
+        
+        let currentBgIndex = Math.floor(Math.random() * heroBackgrounds.length);
+        const heroBg1 = document.getElementById('hero-bg-1');
+        const heroBg2 = document.getElementById('hero-bg-2');
+        let isFirstLayerActive = true;
+        
+        // Preload all background images
+        const imageCache = {};
+        heroBackgrounds.forEach((url, index) => {
+            const img = new Image();
+            img.onload = () => {
+                imageCache[index] = true;
+                console.log(`Background ${index + 1}/${heroBackgrounds.length} loaded`);
+            };
+            img.src = url;
+        });
+        
+        function setBackgroundImage(element, index) {
+            if (!element) return;
+            const bgUrl = heroBackgrounds[index];
+            element.style.backgroundImage = `
+                linear-gradient(135deg, rgba(147, 51, 234, 0.3) 0%, rgba(6, 182, 212, 0.3) 100%),
+                url('${bgUrl}')
+            `;
+        }
+        
+        function rotateBackground() {
+            // Get next background index
+            const nextBgIndex = (currentBgIndex + 1) % heroBackgrounds.length;
+            
+            // Only transition if next image is loaded
+            if (!imageCache[nextBgIndex]) {
+                console.log(`Waiting for image ${nextBgIndex} to load...`);
+                return;
+            }
+            
+            // Determine which layer to update
+            const activeLayer = isFirstLayerActive ? heroBg1 : heroBg2;
+            const nextLayer = isFirstLayerActive ? heroBg2 : heroBg1;
+            
+            // Set next image on hidden layer
+            setBackgroundImage(nextLayer, nextBgIndex);
+            
+            // Give browser time to apply background, then start smooth cross-fade
+            setTimeout(() => {
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        // Cross-fade: hide active, show next
+                        activeLayer.style.opacity = '0';
+                        nextLayer.style.opacity = '1';
+                    });
+                });
+            }, 100);
+            
+            // Update state
+            currentBgIndex = nextBgIndex;
+            isFirstLayerActive = !isFirstLayerActive;
+        }
+        
+        // Set initial background on first layer
+        setBackgroundImage(heroBg1, currentBgIndex);
+        
+        // Rotate background every 15 seconds for more relaxed timing
+        setInterval(rotateBackground, 15000);
+        
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Initialize background music
+        if (window.backgroundMusic) {
+            window.backgroundMusic.init();
+        }
+    </script>
+</body>
+</html>
