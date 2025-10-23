@@ -1056,26 +1056,26 @@ const app = {
     },
     
     async shareToWhatsApp() {
-        const text = encodeURIComponent('¡Mira mi Película Mental! He visualizado mis sueños y metas.');
+        const text = encodeURIComponent('¡🌈 Acabo de crear mi Película Mental — un video con mis sueños y metas. ¡Crea la tuya aquí!🔗 https://pelicula-mental-hzh8.onrender.com');
         const url = `https://wa.me/?text=${text}`;
         window.open(url, '_blank');
     },
     
     async shareToFacebook() {
-        const text = encodeURIComponent('¡Acabo de crear mi Película Mental y visualizar mis sueños!');
+        const text = encodeURIComponent('🎥 He creado mi Película Mental: una experiencia donde mis sueños y metas toman vida con música e imágenes. 💫 ¡Inspírate y crea la tuya también!🔗 https://pelicula-mental-hzh8.onrender.com');
         const url = `https://www.facebook.com/sharer/sharer.php?quote=${text}`;
         window.open(url, '_blank');
     },
     
     async shareToTwitter() {
-        const text = encodeURIComponent('¡Acabo de crear mi Película Mental y visualizar mis sueños! #PeliculaMental #Visualización #Sueños');
+        const text = encodeURIComponent('🌠 Mi Película Mental ya está lista 🎬✨ ¡Un video con mis sueños y metas! Crea la tuya y visualiza tus objetivos 💫 #PelículaMental 🔗 https://pelicula-mental-hzh8.onrender.com');
         const url = `https://twitter.com/intent/tweet?text=${text}`;
         window.open(url, '_blank');
     },
     
     async copyVideoLink() {
         // Since this is a local app, we'll copy a message instead
-        const message = '¡He creado mi Película Mental! Una experiencia de visualización de sueños y metas.';
+        const message = '📽️ ¡He creado mi Película Mental! Una experiencia única para visualizar mis sueños 🌟 Crea la tuya aquí: https://pelicula-mental-hzh8.onrender.com';
         
         try {
             await navigator.clipboard.writeText(message);
