@@ -395,7 +395,12 @@ const app = {
         
         this.updateNavigationButtons();
         
-        
+        // Start or update emoji rain with selected categories
+        if (this.state.selectedDreams.length > 0) {
+            this.startGlobalEmojiRain();
+        } else {
+            this.stopGlobalEmojiRain();
+        }
     },
     
     updateNavigationButtons() {
