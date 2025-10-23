@@ -901,7 +901,6 @@ textarea:focus {
     border-radius: var(--radius-md);
     background: var(--bg-tertiary);
     outline: none;
-    -webkit-appearance: none;
 }
 
 .video-timeline input[type="range"]::-webkit-slider-thumb {
