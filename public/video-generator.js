@@ -17,126 +17,98 @@ const videoGenerator = {
     async generate({ images, quotes, duration, musicUrl, audioStream, audioContext, onProgress }) {
         return new Promise(async (resolve, reject) => {
             try {
-                // Initialize canvas
+                // 🖼️ Inicializa el canvas
                 this.initCanvas();
-                
                 onProgress(25, 'Preparando canvas...');
-                
-                // Load images
+
+                // 📸 Carga las imágenes
                 onProgress(35, 'Cargando imágenes...');
                 const loadedImages = await this.loadImages(images);
-                
+
                 onProgress(45, 'Configurando renderizado...');
-                
-                // Calculate timing
-                const frameDuration = duration * 1000; // Convert to milliseconds
-                const imageTime = frameDuration / images.length;
-                const fps = 30;
-                const totalFrames = Math.floor((duration * fps));
+
+                // 🎬 Cálculo de tiempo y frames
+                const fps = 5; // menos FPS = más fluido y ligero para celular
+                const totalFrames = Math.floor(duration * fps);
                 const framesPerImage = Math.floor(totalFrames / images.length);
-                
-                // Setup MediaRecorder
+
+                // 🧩 Configurar MediaRecorder
                 onProgress(55, 'Iniciando grabación...');
                 const stream = this.canvas.captureStream(fps);
-                
-                // Add audio - priority: custom file > generated audio > none
                 let audioAdded = false;
-                
-                // Try custom music file first
+
+                // 🎵 Intentar agregar música personalizada
                 if (musicUrl && typeof musicUrl === 'string' && musicUrl.trim() !== '') {
                     try {
                         const customAudioStream = await this.loadAudio(musicUrl);
                         if (customAudioStream && customAudioStream.getAudioTracks().length > 0) {
-                            const audioTrack = customAudioStream.getAudioTracks()[0];
-                            stream.addTrack(audioTrack);
+                            stream.addTrack(customAudioStream.getAudioTracks()[0]);
                             audioAdded = true;
-                            console.log('Added custom music to video');
+                            console.log('🎧 Música personalizada agregada');
                         }
-                    } catch (audioError) {
-                        console.warn('Could not add custom audio to video:', audioError);
+                    } catch (err) {
+                        console.warn('No se pudo agregar la música personalizada:', err);
                     }
                 }
-                
-                // If no custom music, try generated audio
+
+                // 🎶 Si no hay música personalizada, intenta usar la generada
                 if (!audioAdded && audioStream) {
                     try {
                         const audioTracks = audioStream.getAudioTracks();
                         if (audioTracks.length > 0) {
                             stream.addTrack(audioTracks[0]);
                             audioAdded = true;
-                            console.log('Added generated music to video');
+                            console.log('🎵 Música generada agregada');
                         }
-                    } catch (audioError) {
-                        console.warn('Could not add generated audio to video:', audioError);
+                    } catch (err) {
+                        console.warn('No se pudo agregar música generada:', err);
                     }
                 }
-                
-                if (!audioAdded) {
-                    console.log('Video will be generated without audio');
-                }
-                
+
+                if (!audioAdded) console.log('⚠️ El video se generará sin audio');
+
+                // 🎥 Configuración del MediaRecorder
                 this.recordedChunks = [];
-                
-                // Configure MediaRecorder based on whether audio is available
                 const hasAudio = stream.getAudioTracks().length > 0;
                 let mimeType = hasAudio ? 'video/webm;codecs=vp8,opus' : 'video/webm;codecs=vp8';
-                
-                // Fallback to simpler mimeType if not supported
-                if (!MediaRecorder.isTypeSupported(mimeType)) {
-                    mimeType = 'video/webm';
-                    console.warn('Using fallback mimeType:', mimeType);
-                }
-                
+                if (!MediaRecorder.isTypeSupported(mimeType)) mimeType = 'video/webm';
+
                 this.mediaRecorder = new MediaRecorder(stream, {
-                    mimeType: mimeType,
-                    videoBitsPerSecond: 2500000
+                    mimeType,
+                    videoBitsPerSecond: 1500000 // menor bitrate = más fluido en móvil
                 });
-                
-                this.mediaRecorder.ondataavailable = (event) => {
-                    if (event.data.size > 0) {
-                        console.log('Recorded chunk size:', event.data.size, 'bytes');
-                        this.recordedChunks.push(event.data);
-                    }
+
+                this.mediaRecorder.ondataavailable = (e) => {
+                    if (e.data.size > 0) this.recordedChunks.push(e.data);
                 };
-                
+
                 this.mediaRecorder.onstop = () => {
-                    console.log('MediaRecorder stopped. Total chunks:', this.recordedChunks.length);
-                    const totalSize = this.recordedChunks.reduce((sum, chunk) => sum + chunk.size, 0);
-                    console.log('Total video size:', totalSize, 'bytes');
-                    
                     const blob = new Blob(this.recordedChunks, { type: 'video/webm' });
-                    console.log('Created video blob:', blob.size, 'bytes, type:', blob.type);
+                    console.log('✅ Video completado. Tamaño:', blob.size);
                     resolve(blob);
                 };
-                
-                this.mediaRecorder.onerror = (error) => {
-                    console.error('MediaRecorder error:', error);
-                    reject(error);
+
+                this.mediaRecorder.onerror = (err) => {
+                    console.error('MediaRecorder error:', err);
+                    reject(err);
                 };
-                
-                // Start recording
-                console.log('Starting MediaRecorder with state:', this.mediaRecorder.state);
+
+                // 🎬 Iniciar grabación
                 this.mediaRecorder.start();
-                console.log('MediaRecorder started, state:', this.mediaRecorder.state);
-                
-                // Small delay to ensure recording has started
-                await new Promise(resolve => setTimeout(resolve, 100));
-                
-                // Render frames
+                await new Promise(r => setTimeout(r, 100));
+
+                // 🖌️ Renderizar los frames
                 onProgress(60, 'Renderizando video...');
-                console.log('Rendering', totalFrames, 'frames at', fps, 'fps');
                 await this.renderFrames(loadedImages, quotes, framesPerImage, fps, onProgress);
-                
-                // Stop recording
+
+                // ⏹️ Detener grabación tras terminar los frames
                 onProgress(95, 'Finalizando video...');
-                console.log('Stopping MediaRecorder...');
+                await new Promise(r => setTimeout(r, 500)); // deja respirar el último frame
                 this.mediaRecorder.stop();
-                console.log('MediaRecorder stop requested, state:', this.mediaRecorder.state);
-                
+
                 onProgress(100, '¡Video completado!');
-                
             } catch (error) {
-                console.error('Error in video generation:', error);
+                console.error('Error en generate():', error);
                 reject(error);
             }
         });
@@ -240,74 +212,70 @@ const videoGenerator = {
     // Frame Rendering
     // ===================================
     async renderFrames(images, quotes, framesPerImage, fps, onProgress) {
-        return new Promise((resolve) => {
+        return new Promise(async (resolve) => {
             let currentFrame = 0;
             const totalFrames = framesPerImage * images.length;
-            let currentImageIndex = 0;
-            let frameInCurrentImage = 0;
-            
-            // Generate random transitions for each image pair
+            const frameDelay = 1000 / fps; // Tiempo real por frame
             const transitions = [];
+
+            // Generar transiciones aleatorias
             for (let i = 0; i < images.length - 1; i++) {
                 const randomIndex = Math.floor(Math.random() * this.transitionTypes.length);
                 transitions.push(this.transitionTypes[randomIndex]);
             }
-            
-            const renderFrame = () => {
-                if (currentFrame >= totalFrames) {
-                    resolve();
-                    return;
-                }
-                
-                // Determine current and next image
-                currentImageIndex = Math.floor(currentFrame / framesPerImage);
-                frameInCurrentImage = currentFrame % framesPerImage;
-                
+
+            // 🧠 Función que dibuja un solo frame
+            const drawFrame = (currentFrame) => {
+                const currentImageIndex = Math.floor(currentFrame / framesPerImage);
+                const frameInCurrentImage = currentFrame % framesPerImage;
+
                 const currentImage = images[currentImageIndex];
                 const nextImage = images[Math.min(currentImageIndex + 1, images.length - 1)];
                 const currentQuote = quotes[currentImageIndex % quotes.length];
-                
-                // Calculate transition progress (0 to 1)
-                const transitionDuration = Math.floor(framesPerImage * 0.3); // 30% of image time for transition
+
+                // Calcular transición
+                const transitionDuration = Math.floor(framesPerImage * 0.3);
                 const transitionStart = framesPerImage - transitionDuration;
                 let transitionProgress = 0;
-                
+
                 if (frameInCurrentImage >= transitionStart && currentImageIndex < images.length - 1) {
                     transitionProgress = (frameInCurrentImage - transitionStart) / transitionDuration;
                 }
-                
-                // Clear canvas
+
+                // Limpiar canvas
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                
-                // Draw images with transition
+
+                // Dibujar imágenes con transición
                 if (transitionProgress > 0 && currentImageIndex < images.length - 1) {
                     const transitionType = transitions[currentImageIndex];
                     this.applyTransition(currentImage, nextImage, transitionProgress, transitionType);
                 } else {
                     this.drawImageCover(currentImage, 1);
                 }
-                
-                // Draw overlay gradient
+
+                // Gradiente y texto
                 this.drawOverlay();
-                
-                // Draw quote with animation
-                const quoteProgress = Math.min(frameInCurrentImage / 30, 1); // Fade in over 1 second
+                const quoteProgress = Math.min(frameInCurrentImage / (fps * 1), 1); // fade-in suave
                 this.drawQuote(currentQuote, quoteProgress);
-                
-                // Update progress
+
+                // Actualizar progreso
                 const progressPercent = 60 + (currentFrame / totalFrames) * 35;
                 onProgress(progressPercent, `Renderizando frame ${currentFrame + 1}/${totalFrames}...`);
-                
-                currentFrame++;
-                
-                // Schedule next frame
-                setTimeout(renderFrame, 1000 / fps);
             };
-            
-            renderFrame();
+
+            // 🎬 Renderizar todos los frames de forma precisa
+            for (let frame = 0; frame < totalFrames; frame++) {
+                drawFrame(frame);
+                await new Promise((r) => setTimeout(r, frameDelay)); // Espera exacta entre frames
+            }
+
+            // 🕒 Esperar 0.5 seg antes de finalizar para no cortar el último frame
+            await new Promise((r) => setTimeout(r, 500));
+
+            resolve();
         });
     },
-    
+
     // ===================================
     // Drawing Methods
     // ===================================
